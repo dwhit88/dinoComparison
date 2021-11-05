@@ -116,6 +116,7 @@ function Tile(species, imagePath, fact) {
     this.fact = fact;
 }
 
+// Methods for fact strings
 let factStrings = {
     weightFact: function (humanData, dinoData) {
         return humanData.name + " weighs " + humanData.weight + " lbs and a " + dinoData.species + " weights " + dinoData.weight 
