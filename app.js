@@ -116,41 +116,39 @@ function Tile(species, imagePath, fact) {
     this.fact = fact;
 }
 
-function weightFact(humanData, dinoData) {
-    return humanData.name + " weighs " + humanData.weight + " lbs and a " + dinoData.species + " weights " + dinoData.weight 
+let factStrings = {
+    weightFact: function (humanData, dinoData) {
+        return humanData.name + " weighs " + humanData.weight + " lbs and a " + dinoData.species + " weights " + dinoData.weight 
         + " lbs - a difference of " + Math.abs(humanData.weight - dinoData.weight) + " pounds!";
-}
-
-function heightFact(humanData, dinoData) {
-    return humanData.name + " is " + humanData.height + " in. tall and a " + dinoData.species + " is " + dinoData.height 
-        + " in. tall - a difference of " + Math.abs(humanData.height - dinoData.height) + " inches!";
-}
-
-function dietFact(humanData, dinoData) {
-    let fact
-    if (humanData.diet.toLowerCase() == dinoData.diet) {
-        fact = humanData.name + " and a " + dinoData.species + " are both " + humanData.diet + "s!";
-    } else {
-        fact = humanData.name + " is a " + humanData.diet + " while a " + dinoData.species + " is a " + dinoData.diet + "!";
+    },
+    heightFact: function (humanData, dinoData) {
+        return humanData.name + " is " + humanData.height + " in. tall and a " + dinoData.species + " is " + dinoData.height 
+            + " in. tall - a difference of " + Math.abs(humanData.height - dinoData.height) + " inches!";
+    },
+    dietFact: function (humanData, dinoData) {
+        let fact
+        if (humanData.diet.toLowerCase() == dinoData.diet) {
+            fact = humanData.name + " and a " + dinoData.species + " are both " + humanData.diet + "s!";
+        } else {
+            fact = humanData.name + " is a " + humanData.diet + " while a " + dinoData.species + " is a " + dinoData.diet + "!";
+        }
+    
+        return fact
+    },
+    continentFact: function (humanData, dinoData) {
+        let fact
+        if (humanData.location == dinoData.location) {
+            fact = humanData.name + " and a " + dinoData.species + " can both be found in " + dinoData.location + "!";
+        } else {
+            fact = humanData.name + " can be found in " + humanData.location + " while a " + dinoData.species + " can be found ";
+            fact += (dinoData.location == "Worldwide" ? "worldwide" : "in " + dinoData.location) + "!";
+        }
+    
+        return fact
+    },
+    timePeriodFact: function (humanData, dinoData) {
+        return humanData.name + " missed seeing a " + dinoData.species + " during the " + dinoData.timePeriod + " period!";
     }
-
-    return fact
-}
-
-function continentFact(humanData, dinoData) {
-    let fact
-    if (humanData.location == dinoData.location) {
-        fact = humanData.name + " and a " + dinoData.species + " can both be found in " + dinoData.location + "!";
-    } else {
-        fact = humanData.name + " can be found in " + humanData.location + " while a " + dinoData.species + " can be found ";
-        fact += (dinoData.location == "Worldwide" ? "worldwide" : "in " + dinoData.location) + "!";
-    }
-
-    return fact
-}
-
-function timePeriodFact(humanData, dinoData) {
-    return humanData.name + " missed seeing a " + dinoData.species + " during the " + dinoData.timePeriod + " period!";
 }
 
 // Generate Fact for each tile
@@ -163,22 +161,22 @@ function generateFact(humanData, dinoData) {
         let fact;
         switch (factTopic) {
             case 'weight':
-                fact = weightFact(humanData, dinoData)
+                fact = factStrings.weightFact(humanData, dinoData)
                 break;
             case 'height':
-                fact = heightFact(humanData, dinoData)
+                fact = factStrings.heightFact(humanData, dinoData)
                 break;
             case 'diet':
-                fact = dietFact(humanData, dinoData)
+                fact = factStrings.dietFact(humanData, dinoData)
                 break;
             case 'continent':
-                fact = continentFact(humanData, dinoData)
+                fact = factStrings.continentFact(humanData, dinoData)
                 break;
             case 'fact':
                 fact = dinoData.fact;
                 break;
             case 'when':
-                fact = timePeriodFact(humanData, dinoData)
+                fact = factStrings.timePeriodFact(humanData, dinoData)
                 break;
         };
         return fact;
