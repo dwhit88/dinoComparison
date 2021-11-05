@@ -160,22 +160,22 @@ function generateFact(humanData, dinoData) {
         let factTopic = factOptions[Math.floor(Math.random() * factOptions.length)];
         let fact;
         switch (factTopic) {
-            case 'weight':
+            case "weight":
                 fact = factStrings.weightFact(humanData, dinoData)
                 break;
-            case 'height':
+            case "height":
                 fact = factStrings.heightFact(humanData, dinoData)
                 break;
-            case 'diet':
+            case "diet":
                 fact = factStrings.dietFact(humanData, dinoData)
                 break;
-            case 'continent':
+            case "continent":
                 fact = factStrings.continentFact(humanData, dinoData)
                 break;
-            case 'fact':
+            case "fact":
                 fact = dinoData.fact;
                 break;
-            case 'when':
+            case "when":
                 fact = factStrings.timePeriodFact(humanData, dinoData)
                 break;
         };
