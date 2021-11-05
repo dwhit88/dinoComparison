@@ -77,20 +77,22 @@ const dinoData = {
 };
 
 // Create Dino Object
-function Dino(species, weight, heightInInches, diet, location, timePeriod, fact) {
-    this.species = species;
-    this.weight = weight;
-    this.height = heightInInches;
-    this.diet = diet;
-    this.location = location;
-    this.timePeriod = timePeriod;
-    this.fact = fact;
+class Dino {
+    constructor(species, weight, heightInInches, diet, location, timePeriod, fact) {
+        this.species = species;
+        this.weight = weight;
+        this.height = heightInInches;
+        this.diet = diet;
+        this.location = location;
+        this.timePeriod = timePeriod;
+        this.fact = fact;
+    }
 }
 
 // Create Dino Objects
 function createDinoObjects() {
     let dinoArray = new Array();
-    for (dino of dinoData['Dinos']) {
+    for (dino of dinoData["Dinos"]) {
         let dinoObject = new Dino(dino.species, dino.weight, dino.height, dino.diet, dino.where, dino.when, dino.fact);
         dinoObject.imagePath = "'images/" + dino.species.toLowerCase() + ".png'";
         dinoArray.push(dinoObject);
@@ -100,11 +102,11 @@ function createDinoObjects() {
 
 // Create Human Object
 function Human() {
-    this.name = document.getElementById('name').value;
-    this.height = Number(document.getElementById('feet').value * 12) + Number(document.getElementById('inches').value);
-    this.weight = Number(document.getElementById('weight').value);
-    this.diet = document.getElementById('diet').value;
-    this.location = document.getElementById('continent').value;
+    this.name = document.getElementById("name").value;
+    this.height = Number(document.getElementById("feet").value * 12) + Number(document.getElementById("inches").value);
+    this.weight = Number(document.getElementById("weight").value);
+    this.diet = document.getElementById("diet").value;
+    this.location = document.getElementById("continent").value;
 }
 
 // Create Tile Object
@@ -114,41 +116,69 @@ function Tile(species, imagePath, fact) {
     this.fact = fact;
 }
 
+function weightFact(humanData, dinoData) {
+    return humanData.name + " weighs " + humanData.weight + " lbs and a " + dinoData.species + " weights " + dinoData.weight 
+        + " lbs - a difference of " + Math.abs(humanData.weight - dinoData.weight) + " pounds!";
+}
+
+function heightFact(humanData, dinoData) {
+    return humanData.name + " is " + humanData.height + " in. tall and a " + dinoData.species + " is " + dinoData.height 
+        + " in. tall - a difference of " + Math.abs(humanData.height - dinoData.height) + " inches!";
+}
+
+function dietFact(humanData, dinoData) {
+    let fact
+    if (humanData.diet.toLowerCase() == dinoData.diet) {
+        fact = humanData.name + " and a " + dinoData.species + " are both " + humanData.diet + "s!";
+    } else {
+        fact = humanData.name + " is a " + humanData.diet + " while a " + dinoData.species + " is a " + dinoData.diet + "!";
+    }
+
+    return fact
+}
+
+function continentFact(humanData, dinoData) {
+    let fact
+    if (humanData.location == dinoData.location) {
+        fact = humanData.name + " and a " + dinoData.species + " can both be found in " + dinoData.location + "!";
+    } else {
+        fact = humanData.name + " can be found in " + humanData.location + " while a " + dinoData.species + " can be found ";
+        fact += (dinoData.location == "Worldwide" ? "worldwide" : "in " + dinoData.location) + "!";
+    }
+
+    return fact
+}
+
+function timePeriodFact(humanData, dinoData) {
+    return humanData.name + " missed seeing a " + dinoData.species + " during the " + dinoData.timePeriod + " period!";
+}
+
 // Generate Fact for each tile
 function generateFact(humanData, dinoData) {
     if (dinoData.species == "Pigeon") {
         return dinoData.fact;
     } else {
-        let factOptions = ['weight', 'height', 'diet', 'continent', 'fact', 'when'];
+        let factOptions = ["weight", "height", "diet", "continent", "fact", "when"];
         let factTopic = factOptions[Math.floor(Math.random() * factOptions.length)];
         let fact;
         switch (factTopic) {
             case 'weight':
-                fact = humanData.name + " weighs " + humanData.weight + " lbs and a " + dinoData.species + " weights " + dinoData.weight + " lbs - a difference of " + Math.abs(humanData.weight - dinoData.weight) + " pounds!";
+                fact = weightFact(humanData, dinoData)
                 break;
             case 'height':
-                fact = humanData.name + " is " + humanData.height + " in. tall and a " + dinoData.species + " is " + dinoData.height + " in. tall - a difference of " + Math.abs(humanData.height - dinoData.height) + " inches!";
+                fact = heightFact(humanData, dinoData)
                 break;
             case 'diet':
-                if (humanData.diet.toLowerCase() == dinoData.diet) {
-                    fact = humanData.name + " and a " + dinoData.species + " are both " + humanData.diet + "s!";
-                } else {
-                    fact = humanData.name + " is a " + humanData.diet + " while a " + dinoData.species + " is a " + dinoData.diet + "!";
-                }
+                fact = dietFact(humanData, dinoData)
                 break;
             case 'continent':
-                if (humanData.location == dinoData.location) {
-                    fact = humanData.name + " and a " + dinoData.species + " can both be found in " + dinoData.location + "!";
-                } else {
-                    fact = humanData.name + " can be found in " + humanData.location + " while a " + dinoData.species + " can be found ";
-                    fact += (dinoData.location == "Worldwide" ? "worldwide" : "in " + dinoData.location) + "!";
-                }
+                fact = continentFact(humanData, dinoData)
                 break;
             case 'fact':
                 fact = dinoData.fact;
                 break;
             case 'when':
-                fact = humanData.name + " missed seeing a " + dinoData.species + " during the " + dinoData.timePeriod + " period!";
+                fact = timePeriodFact(humanData, dinoData)
                 break;
         };
         return fact;
@@ -167,7 +197,7 @@ function generateTileData() {
 
     allTiles
         .sort(function(a, b){return 0.5 - Math.random()})           // From https://www.w3schools.com/js/js_array_sort.asp
-        .splice(4, 0, new Tile("Human", "images/human.png", ""));
+        .splice(4, 0, new Tile(human.name, "images/human.png", ""));
 
     return allTiles;
 }
@@ -176,10 +206,11 @@ function generateTileData() {
 function renderTiles(allTilesData) {
     let testDivItems = "";
     for (data of allTilesData) {
-        testDivItems += "<div class='grid-item'><h3>" + data.species + "</h3><img src=" + data.imagePath + " alt='dino name' /><p>" + data.fact + "</p></div>"
+        testDivItems += "<div class='grid-item'><h3>" + data.species + "</h3><img src=" + data.imagePath 
+            + " alt='dino name' /><p>" + data.fact + "</p></div>"
     };
 
-    document.getElementById('grid').innerHTML += testDivItems;
+    document.getElementById("grid").innerHTML += testDivItems;
 }
 
 // Initiate comparison
